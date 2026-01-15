@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { Header } from '../components/Header';
 
 interface User {
@@ -21,7 +20,6 @@ const ROLE_LABELS: Record<number, string> = {
 };
 
 export default function UsersPage() {
-  useRequireAuth(); // 認証チェック
   const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,8 +27,26 @@ export default function UsersPage() {
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
 
   useEffect(() => {
+    checkPermission();
     fetchUsers();
   }, []);
+
+  const checkPermission = async () => {
+    try {
+      const response = await fetch('/api/auth/me');
+      if (!response.ok) {
+        router.push('/login');
+        return;
+      }
+      const data = await response.json();
+      if (data.user.role !== 2) {
+        router.push('/unauthorized');
+      }
+    } catch (error) {
+      console.error('権限確認エラー:', error);
+      router.push('/login');
+    }
+  };
 
   const fetchUsers = async () => {
     try {
@@ -63,7 +79,7 @@ export default function UsersPage() {
     try {
       setUpdatingUserId(userId);
       const response = await fetch(`/api/users/${userId}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },

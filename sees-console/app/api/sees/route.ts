@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { redisCache } from '@/lib/redis';
+import { getSession } from '@/lib/auth';
 
 export async function GET() {
   try {
@@ -25,6 +26,15 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    // 権限チェック（編集者以上）
+    const user = await getSession();
+    if (!user || user.role < 1) {
+      return NextResponse.json(
+        { error: 'この操作を行う権限がありません' },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const {
       draftId,

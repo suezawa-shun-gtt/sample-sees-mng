@@ -66,7 +66,7 @@ export function Header() {
               <>
                 {/* ユーザー名 */}
                 <div className="text-sm text-gray-700">
-                  {user.name}
+                  {user.name} さん
                 </div>
 
                 {/* メニューバー */}
@@ -102,19 +102,21 @@ export function Header() {
 
                       {/* メニュー本体 */}
                       <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                        {user.role === 2 && (
+                          <Link
+                            href="/users"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => setShowMenu(false)}
+                          >
+                            ユーザー一覧
+                          </Link>
+                        )}
                         <Link
-                          href="/users/new"
+                          href="/change-password"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           onClick={() => setShowMenu(false)}
                         >
-                          新規ユーザー登録
-                        </Link>
-                        <Link
-                          href="/users"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => setShowMenu(false)}
-                        >
-                          ユーザー一覧
+                          パスワード変更
                         </Link>
                         <hr className="my-1 border-gray-200" />
                         <button

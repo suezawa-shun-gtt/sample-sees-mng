@@ -18,9 +18,29 @@ interface Sees {
 }
 
 export default function SeesEditPage() {
-  useRequireAuth(); // 認証チェック
   const router = useRouter();
   const params = useParams();
+
+  useEffect(() => {
+    checkPermission();
+  }, []);
+
+  const checkPermission = async () => {
+    try {
+      const response = await fetch('/api/auth/me');
+      if (!response.ok) {
+        router.push('/login');
+        return;
+      }
+      const data = await response.json();
+      if (data.user.role < 1) {
+        router.push('/unauthorized');
+      }
+    } catch (error) {
+      console.error('権限確認エラー:', error);
+      router.push('/login');
+    }
+  };
   const seesId = params.id as string;
 
   const [sees, setSees] = useState<Sees | null>(null);

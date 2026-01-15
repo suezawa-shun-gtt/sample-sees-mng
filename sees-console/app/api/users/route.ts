@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { getSession } from '@/lib/auth';
 
 export async function GET() {
   try {
@@ -30,6 +31,15 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    // 権限チェック（管理者のみ）
+    const user = await getSession();
+    if (!user || user.role !== 2) {
+      return NextResponse.json(
+        { error: 'この操作を行う権限がありません' },
+        { status: 403 }
+      );
+    }
+
     const { name, email, password, role } = await request.json();
 
     // バリデーション

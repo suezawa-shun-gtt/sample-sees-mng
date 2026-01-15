@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getSession } from '@/lib/auth';
 
 export async function GET(
   request: Request,
@@ -44,6 +45,15 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // 権限チェック（編集者以上）
+    const user = await getSession();
+    if (!user || user.role < 1) {
+      return NextResponse.json(
+        { error: 'この操作を行う権限がありません' },
+        { status: 403 }
+      );
+    }
+
     const { id } = await params;
     const body = await request.json();
     const { redirectUrl, note, templateVariables, previewUrl, nsRecords } = body;
@@ -104,6 +114,15 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // 権限チェック（編集者以上）
+    const user = await getSession();
+    if (!user || user.role < 1) {
+      return NextResponse.json(
+        { error: 'この操作を行う権限がありません' },
+        { status: 403 }
+      );
+    }
+
     const { id } = await params;
 
     if (!id) {

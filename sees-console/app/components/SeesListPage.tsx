@@ -34,10 +34,24 @@ export function SeesListPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedSees, setSelectedSees] = useState<Sees | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [userRole, setUserRole] = useState<number>(0);
 
   useEffect(() => {
+    fetchUserRole();
     fetchSeesList();
   }, []);
+
+  const fetchUserRole = async () => {
+    try {
+      const response = await fetch('/api/auth/me');
+      if (response.ok) {
+        const data = await response.json();
+        setUserRole(data.user.role);
+      }
+    } catch (error) {
+      console.error('ユーザー情報取得エラー:', error);
+    }
+  };
 
   const fetchSeesList = async () => {
     try {
@@ -110,12 +124,14 @@ export function SeesListPage() {
             <h1 className="text-3xl font-light text-gray-900">
               SEES一覧
             </h1>
-            <button
-              onClick={() => router.push('/sees/new')}
-              className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-            >
-              + 新規作成
-            </button>
+            {userRole >= 1 && (
+              <button
+                onClick={() => router.push('/sees/new')}
+                className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                + 新規作成
+              </button>
+            )}
           </div>
 
         {seesList.length === 0 ? (
@@ -219,18 +235,24 @@ export function SeesListPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={() => router.push(`/sees/edit/${sees.id}`)}
-                        className="text-blue-600 hover:text-blue-900 mr-4"
-                      >
-                        編集
-                      </button>
-                      <button
-                        onClick={() => handleDeleteClick(sees)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        削除
-                      </button>
+                      {userRole >= 1 ? (
+                        <>
+                          <button
+                            onClick={() => router.push(`/sees/edit/${sees.id}`)}
+                            className="text-blue-600 hover:text-blue-900 mr-4"
+                          >
+                            編集
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(sees)}
+                            className="text-red-600 hover:text-red-900"
+                          >
+                            削除
+                          </button>
+                        </>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
                     </td>
                   </tr>
                 ))}

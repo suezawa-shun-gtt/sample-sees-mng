@@ -6,8 +6,28 @@ import { DEFAULT_PLACEHOLDERS, validatePlaceholders } from '@/lib/template-utils
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export default function SeesNewPage() {
-  useRequireAuth(); // 認証チェック
   const router = useRouter();
+
+  useEffect(() => {
+    checkPermission();
+  }, []);
+
+  const checkPermission = async () => {
+    try {
+      const response = await fetch('/api/auth/me');
+      if (!response.ok) {
+        router.push('/login');
+        return;
+      }
+      const data = await response.json();
+      if (data.user.role < 1) {
+        router.push('/unauthorized');
+      }
+    } catch (error) {
+      console.error('権限確認エラー:', error);
+      router.push('/login');
+    }
+  };
   const [title, setTitle] = useState('');
   const [targetDomain, setTargetDomain] = useState('');
   const [redirectUrl, setRedirectUrl] = useState('');

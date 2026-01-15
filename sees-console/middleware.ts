@@ -2,13 +2,13 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // 認証不要なパス
-const publicPaths = ['/login', '/signup', '/reset-password'];
+const publicPaths = ['/login', '/signup', '/reset-password', '/unauthorized'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 認証不要なパスの場合はスルー
-  if (publicPaths.includes(pathname)) {
+  if (publicPaths.includes(pathname) || pathname.startsWith('/reset-password/')) {
     return NextResponse.next();
   }
 

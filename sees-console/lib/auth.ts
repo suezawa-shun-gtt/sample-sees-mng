@@ -63,3 +63,31 @@ export async function getSession(): Promise<SessionUser | null> {
     return null;
   }
 }
+
+/**
+ * 管理者権限が必要なページ用のチェック関数
+ * 管理者以外は /unauthorized にリダイレクト
+ */
+export async function requireAdmin(): Promise<SessionUser> {
+  const user = await requireAuth();
+  
+  if (user.role !== 2) {
+    redirect('/unauthorized');
+  }
+  
+  return user;
+}
+
+/**
+ * 編集者以上の権限が必要なページ用のチェック関数
+ * 閲覧者は /unauthorized にリダイレクト
+ */
+export async function requireEditor(): Promise<SessionUser> {
+  const user = await requireAuth();
+  
+  if (user.role < 1) {
+    redirect('/unauthorized');
+  }
+  
+  return user;
+}

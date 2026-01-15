@@ -108,23 +108,13 @@ export default function LoginPage() {
 
           {/* リンク */}
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="space-y-3 text-sm text-center">
-              <div>
-                <Link
-                  href="/signup"
-                  className="text-gray-700 hover:text-gray-900 underline"
-                >
-                  新規ユーザー登録
-                </Link>
-              </div>
-              <div>
-                <Link
-                  href="/reset-password"
-                  className="text-gray-700 hover:text-gray-900 underline"
-                >
-                  パスワードを忘れた方
-                </Link>
-              </div>
+            <div className="text-sm text-center">
+              <Link
+                href="/reset-password"
+                className="text-gray-700 hover:text-gray-900 underline"
+              >
+                パスワードを忘れた方はこちら
+              </Link>
             </div>
           </div>
         </div>

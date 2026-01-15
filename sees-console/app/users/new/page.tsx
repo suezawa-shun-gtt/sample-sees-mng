@@ -1,13 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export default function UserNewPage() {
-  useRequireAuth(); // 認証チェック
   const router = useRouter();
+
+  useEffect(() => {
+    checkPermission();
+  }, []);
+
+  const checkPermission = async () => {
+    try {
+      const response = await fetch('/api/auth/me');
+      if (!response.ok) {
+        router.push('/login');
+        return;
+      }
+      const data = await response.json();
+      if (data.user.role !== 2) {
+        router.push('/unauthorized');
+      }
+    } catch (error) {
+      console.error('権限確認エラー:', error);
+      router.push('/login');
+    }
+  };
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
