@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ユーザーテーブル
+model User {
+  id         String   @id @default(uuid())
+  name       String   // ユーザー名
+  email      String   @unique // メールアドレス（ユニーク）
+  password   String   // ハッシュ化されたパスワード
+  role       Int      @default(0) // 権限(0: 閲覧者、1: 編集者、2: 管理者)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+// SEES基本情報テーブル
+model Sees {
+  id                String   @id @default(uuid())
+  title             String   // タイトル
+  note              String?  // 備考
+  targetDomain      String   @unique @map("target_domain")
+  redirectUrl       String   @map("redirect_url")
+  previewUrl        String?  @map("preview_url") // HTML内部確認用URL
+  templateVariables Json     @map("template_variables") // プレースホルダーの値をJSON形式で保存
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  // リレーション
+  nsRecords         NsRecord[]
+
+  @@map("sees")
+}
+
+// NSレコード情報テーブル
+model NsRecord {
+  id        String   @id @default(uuid())
+  seesId    String   @map("sees_id")
+  nameServer String  @map("name_server")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // リレーション
+  sees      Sees     @relation(fields: [seesId], references: [id], onDelete: Cascade)
+
+  @@map("ns_records")
+}

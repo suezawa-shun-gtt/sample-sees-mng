@@ -1,0 +1,117 @@
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: sees-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sees_user
+      POSTGRES_PASSWORD: sees_password
+      POSTGRES_DB: sees_db
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --locale=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sees-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sees_user -d sees_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: sees-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - sees-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: redis-server --appendonly yes
+
+  # Next.js Application Server
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: sees-app
+    restart: unless-stopped
+    environment:
+      # Database
+      DATABASE_URL: "postgresql://sees_user:sees_password@db:5432/sees_db"
+      
+      # Redis
+      REDIS_URL: "redis://redis:6379"
+      
+      # Next.js
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: 1
+      
+      # Azure (開発環境用 - 実際の値に置き換えてください)
+      AZURE_SUBSCRIPTION_ID: "${AZURE_SUBSCRIPTION_ID:-your-subscription-id}"
+      AZURE_TENANT_ID: "${AZURE_TENANT_ID:-your-tenant-id}"
+      AZURE_CLIENT_ID: "${AZURE_CLIENT_ID:-your-client-id}"
+      AZURE_CLIENT_SECRET: "${AZURE_CLIENT_SECRET:-your-client-secret}"
+      AZURE_RESOURCE_GROUP: "${AZURE_RESOURCE_GROUP:-sees-resources}"
+      AZURE_LOCATION: "${AZURE_LOCATION:-japaneast}"
+    ports:
+      - "3000:3000"
+    volumes:
+      # ソースコードをマウント（ホットリロード用）
+      - .:/app
+      # node_modulesはコンテナ内のものを優先
+      - /app/node_modules
+      # .nextビルドキャッシュもコンテナ内で管理
+      - /app/.next
+      # Prisma生成ファイルもコンテナ内で管理
+      - /app/app/generated
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sees-network
+
+  # Prisma Studio (optional - データベースGUI)
+  prisma-studio:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: sees-prisma-studio
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "postgresql://sees_user:sees_password@db:5432/sees_db"
+    ports:
+      - "5555:5555"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - sees-network
+    command: npx prisma studio --port 5555 --browser none
+    profiles:
+      - tools
+
+networks:
+  sees-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local

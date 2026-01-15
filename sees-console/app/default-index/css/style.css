@@ -1,0 +1,947 @@
+/*
+Responsive One Page HTML
+
+Author: GovTechTokyo
+Date: April 2024
+Version: 1.0
+
+-----------------------
+| [Table of Contents] |
+-----------------------
+
+1. Main Style
+2. Section
+3. Links
+4. Header
+5. Main Content
+6. Information
+7. Footer
+
+/*===============
+  1. Main Style
+================*/
+html,
+body,
+div,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+small,
+strong,
+sub,
+sup,
+var,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+label,
+tr,
+th,
+td,
+footer,
+header,
+section,
+summary {
+  outline: 0;
+}
+/* Reading is too slow...*/
+/* @font-face{
+  font-family: 'Noto Sans JP';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Noto Sans CJK JP"),
+  url(//fonts.gstatic.com/ea/notosansjp/v5/NotoSansJP-Regular.woff2) format('woff2'),
+  url(//fonts.gstatic.com/ea/notosansjp/v5/NotoSansJP-Regular.woff) format('woff'),
+  url(//fonts.gstatic.com/ea/notosansjp/v5/NotoSansJP-Regular.otf) format('opentype');
+  font-display: swap;
+} */
+/* breakpoint sp < 992px < PC */
+@media only screen and (max-width: 992px) {
+  .sp {
+    display: block !important;
+  }
+}
+@media only screen and (min-width: 993px) {
+  .pc {
+    display: none !important;
+  }
+}
+html {
+  font-size: 62.5%;
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #707070;
+  background-color: #fff !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0.6px;
+  margin: 0;
+}
+@media only screen and (max-width: 992px) {
+  body {
+    font-size: 1.2rem;
+  }
+}
+@media only screen and (max-width: 580px) {
+  body {
+    margin: 2% 0 0 0;
+  }
+}
+h1 {
+  font-size: 3.6rem;
+  color: #fff;
+  letter-spacing: 1px;
+  margin: 0;
+  width: 100%;
+}
+@media only screen and (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+}
+summary {
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-size: 1.6rem;
+  line-height: 2.2;
+  color: #00a040;
+  margin-top: 0;
+  width: 100%;
+  display: block;
+  list-style: none;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+h3 {
+  font-weight: 400;
+  font-size: 1.4rem;
+}
+hr {
+  height: 1px;
+  background-color: #bababa;
+  border: none;
+}
+@media only screen and (max-width: 540px) {
+  h3 {
+    font-size: 1.3rem;
+  }
+}
+ul {
+  padding: 0 0 0 17px;
+}
+@media only screen and (max-width: 540px) {
+  ul {
+    padding: 0 0 0 0;
+  }
+}
+.wrapper {
+  box-sizing: border-box;
+  padding: 0 4%;
+  margin: 0 auto;
+}
+@media only screen and (max-width: 540px) {
+  .wrapper {
+    padding: 0 7%;
+  }
+}
+@media only screen and (max-width: 414px) {
+  .wrapper {
+    padding: 0 4%;
+  }
+}
+.inner {
+  margin: 2% 17%;
+}
+@media only screen and (max-width: 768px) {
+  .inner {
+    margin: 2% 12%;
+  }
+}
+@media only screen and (max-width: 540px) {
+  .inner {
+    margin: 2% 1%;
+  }
+}
+@media only screen and (max-width: 370px) {
+  .inner {
+    margin: 2% 0%;
+  }
+}
+input {
+  margin-left: 1%;
+}
+.text-align {
+  text-align: center;
+}
+.display-flex {
+  display: flex;
+}
+.info-list {
+  max-width: 800px;
+  margin: auto;
+}
+@media only screen and (max-width: 900px) {
+  .info-list {
+    max-width: 95%;
+  }
+}
+@media only screen and (max-width: 540px) {
+  .info-list {
+    max-width: 400px;
+  }
+}
+@media only screen and (max-width: 414px) {
+  .info-list {
+    max-width: 340px;
+  }
+}
+@media only screen and (max-width: 360px) {
+  .info-list {
+    max-width: 300px;
+  }
+}
+@media only screen and (max-width: 340px) {
+  .info-list {
+    max-width: 280px;
+  }
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+input[type="checkbox"] {
+  display: none;
+}
+.checkbox {
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  padding: 10px 30px 10px 60px;
+  position: relative;
+  width: auto;
+}
+@media only screen and (max-width: 540px) {
+  .checkbox {
+    padding: 15px 5px 15px 35px;
+  }
+}
+@media only screen and (max-width: 360px) {
+  .checkbox {
+    padding: 15px 5px 15px 33px;
+  }
+}
+.checkbox::before {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  content: "";
+  display: block;
+  height: 16px;
+  left: 6%;
+  margin-top: -8px;
+  position: absolute;
+  top: 50%;
+  width: 16px;
+}
+.checkbox::after {
+  border-right: 3px solid #00a040;
+  border-bottom: 3px solid #00a040;
+  content: "";
+  display: block;
+  height: 20px;
+  left: 7%;
+  margin-top: -16px;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  transform: rotate(45deg);
+  width: 9px;
+}
+@media only screen and (max-width: 540px) {
+  .checkbox::before {
+    left: 4%;
+  }
+  .checkbox::after {
+    left: 5%;
+  }
+}
+input[type="checkbox"]:checked + .checkbox::before {
+  border-color: #666;
+}
+input[type="checkbox"]:checked + .checkbox::after {
+  opacity: 1;
+}
+.margin {
+  margin: 3% 0 3% 0;
+}
+@media only screen and (max-width: 540px) {
+  .margin {
+    margin: 8% 0 3% 0;
+  }
+}
+.margin-bottom {
+  margin-bottom: 2%;
+}
+
+/*===============
+  2. Section
+================*/
+.section-info {
+  margin: 0;
+}
+@media only screen and (max-width: 540px) {
+  .section-info {
+    margin: 5% 0 5% 0;
+  }
+  .the-step {
+    margin-bottom: 6%;
+  }
+}
+
+/*===============
+  3. Links
+================*/
+a {
+  color: #0000ff;
+}
+a:hover,
+a:focus,
+a:active {
+  color: #00a040;
+  text-decoration: none;
+  outline: none;
+}
+/*============
+  4. Header
+=============*/
+#top {
+  position: relative;
+}
+.page-header {
+  width: 100%;
+}
+.brand-area {
+  height: 80px;
+}
+.tokyo-logo img {
+  width: 185px;
+}
+.outer {
+  left: 8%;
+  height: 0;
+  padding-top: calc(160 / 1200 * 100%);
+  width: 92%;
+  overflow: hidden;
+}
+.hero-image {
+  position: relative;
+  background-image: url(../images/hero-img-bg.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  left: 8%;
+  height: 0;
+  padding-top: calc(160 / 1200 * 100%);
+  width: 92%;
+  z-index: 1;
+  overflow: hidden;
+}
+.outer .hero-img-bg-add {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 46%;
+  z-index: 2;
+  height: 98%;
+}
+.vaccine {
+  position: absolute;
+  top: 0;
+  object-fit: cover;
+  left: 58%;
+  z-index: 3;
+  height: 100%;
+  width: auto;
+}
+.hero-image__sp {
+  display: none;
+}
+#top h1.tokyo-logo {
+  line-height: 80px;
+  padding-left: 8%;
+  display: inline-block;
+  margin: 0 !important;
+  width: 90%;
+}
+@media only screen and (max-width: 992px) {
+  .hero-image {
+    display: none;
+  }
+  .hero-image__sp {
+    display: block;
+    position: relative;
+    background-color: #fff;
+    background-image: url(../images/hero-img__sp.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    left: 8%;
+    height: 0;
+    padding-top: calc(200 / 1000 * 100%);
+    width: 92%;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .hero-img__sp-add {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    height: auto;
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 930px) {
+  .hero-image__sp {
+    padding-top: calc(210 / 1000 * 100%);
+  }
+}
+@media only screen and (max-width: 900px) {
+  .hero-image__sp {
+    left: 8%;
+    padding-top: calc(230 / 1000 * 100%);
+    width: 92%;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .hero-image__sp {
+    padding-top: calc(250 / 1000 * 100%);
+  }
+}
+@media only screen and (max-width: 768px) {
+  .hero-image__sp {
+    padding-top: calc(270 / 1000 * 100%);
+    left: 10%;
+    width: 90%;
+  }
+  #top h1.tokyo-logo {
+    padding-left: 10%;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .hero-image__sp {
+    padding-top: calc(300 / 1000 * 100%);
+  }
+}
+@media only screen and (max-width: 680px) {
+  .hero-image__sp {
+    padding-top: calc(320 / 1000 * 100%);
+  }
+}
+@media only screen and (max-width: 600px) {
+  .hero-image__sp {
+    padding-top: calc(340 / 1000 * 100%);
+  }
+}
+@media only screen and (max-width: 580px) {
+  .hero-image__sp {
+    left: 6%;
+    height: 0;
+    padding-top: calc(380 / 1000 * 100%);
+    width: 94%;
+  }
+  .brand-area {
+    height: 65px;
+  }
+  #top h1.tokyo-logo {
+    line-height: 65px;
+    padding-left: 7%;
+    left: 0;
+  }
+  .hero-img__sp-add {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    height: auto;
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 540px) {
+  .hero-image__sp {
+    left: 6%;
+    height: 0;
+    padding-top: calc(150 / 360 * 100%);
+    width: 94%;
+  }
+  .brand-area {
+    height: 65px;
+  }
+  #top h1.tokyo-logo {
+    line-height: 65px;
+    padding-left: 7%;
+    left: 0;
+  }
+  .hero-img__sp-add {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    height: 98%;
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .hero-image__sp {
+    padding-top: calc(160 / 360 * 100%);
+  }
+}
+@media only screen and (max-width: 414px) {
+  .hero-image__sp {
+    left: 4%;
+    height: 0;
+    padding-top: calc(160 / 360 * 100%);
+    width: 96%;
+  }
+  .brand-area {
+    height: 65px;
+  }
+  #top h1.tokyo-logo {
+    line-height: 67px;
+    padding-left: 4%;
+    left: 0;
+  }
+}
+@media only screen and (max-width: 375px) {
+  #top h1.tokyo-logo {
+    line-height: 65px;
+    padding-left: 4%;
+  }
+  .brand-area {
+    height: 65px;
+  }
+}
+/*=================
+  5. Main Content
+==================*/
+#top .main-content {
+  z-index: 100;
+  position: absolute;
+  top: 30%;
+  left: 16%;
+  width: 84%;
+}
+@media only screen and (max-width: 1024px) {
+  #top .main-content {
+    top: 31%;
+    left: 15%;
+  }
+}
+@media only screen and (max-width: 900px) {
+  #top .main-content {
+    top: 29%;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #top .main-content {
+    top: 28%;
+    left: 12%;
+    width: 88%;
+  }
+}
+@media only screen and (max-width: 580px) {
+  #top .main-content {
+    padding: 0;
+    left: 15%;
+    width: 85%;
+    top: 24%;
+  }
+}
+@media only screen and (max-width: 540px) {
+  #top .main-content {
+    padding: 0;
+    left: 15%;
+    width: 85%;
+    top: 23%;
+  }
+}
+@media only screen and (max-width: 414px) {
+  #top .main-content {
+    padding: 0;
+    left: 10%;
+    width: 90%;
+    top: 23%;
+  }
+}
+@media only screen and (max-width: 375px) {
+  #top .main-content {
+    padding: 0;
+    left: 12%;
+    width: 88%;
+    top: 22%;
+  }
+}
+@media only screen and (max-width: 360px) {
+  #top .main-content {
+    padding: 0;
+    left: 10%;
+    width: 90%;
+    top: 22%;
+  }
+}
+@media only screen and (max-width: 320px) {
+  #top .main-content {
+    padding: 0;
+    left: 9%;
+    width: 91%;
+    top: 23%;
+  }
+}
+
+#top p,
+span {
+  color: #fff;
+}
+#top p {
+  font-size: 2rem;
+  position: relative;
+  top: 20px;
+  display: inline;
+  margin: 0;
+}
+@media only screen and (max-width: 1024px) {
+  #top p {
+    font-size: 1.8rem;
+    top: 23px;
+  }
+}
+@media only screen and (max-width: 992px) {
+  #top p {
+    font-size: 2.1rem;
+    top: 1.3rem;
+  }
+}
+@media only screen and (max-width: 886px) {
+  #top p {
+    top: 1.7rem;
+  }
+}
+@media only screen and (max-width: 790px) {
+  #top p {
+    top: 2.2rem;
+    font-size: 2.2rem;
+  }
+}
+@media only screen and (max-width: 680px) {
+  #top p {
+    font-size: 2.2rem;
+    top: 2.1rem;
+  }
+}
+@media only screen and (max-width: 580px) {
+  #top p {
+    font-size: 2.2rem;
+    top: 20px;
+  }
+}
+@media only screen and (max-width: 414px) {
+  #top p {
+    font-size: 1.9rem;
+    top: 20px;
+  }
+}
+@media only screen and (max-width: 375px) {
+  #top p {
+    font-size: 1.7rem;
+    top: 28px;
+  }
+}
+@media only screen and (max-width: 320px) {
+  #top p {
+    font-size: 1.5rem;
+    top: 28px;
+  }
+}
+#top span {
+  padding: 6px 25px;
+  line-height: 1.8;
+  border: solid 3px #fff;
+  border-radius: 30px;
+}
+@media only screen and (max-width: 1024px) {
+  #top span {
+    padding: 2px 26px;
+    border: solid 1px #fff;
+  }
+}
+@media only screen and (max-width: 992px) {
+  #top span {
+    padding: 0;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1.7;
+  }
+  .main-content__target {
+    text-align: center;
+    padding: 1px 60px;
+    line-height: 1.8;
+    border: solid 2px #fff;
+    border-radius: 30px;
+    display: inline-block;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #top span {
+    padding: 0;
+    border: none;
+    font-size: 1.6rem;
+  }
+  .main-content__target {
+    text-align: center;
+    padding: 1px 60px;
+    line-height: 1.8;
+    border: solid 2px #fff;
+    border-radius: 30px;
+    display: inline-block;
+  }
+}
+@media only screen and (max-width: 540px) {
+  #top span {
+    padding: 0;
+    border: none;
+    font-size: 1.6rem;
+  }
+  .main-content__target {
+    text-align: center;
+    padding: 1px 60px;
+    line-height: 1.8;
+    border: solid 2px #fff;
+    border-radius: 30px;
+    display: inline-block;
+  }
+}
+@media only screen and (max-width: 414px) {
+  #top span {
+    padding: 0;
+    border: none;
+    font-size: 1.6rem;
+  }
+  .main-content__target {
+    text-align: center;
+    padding: 1px 27px;
+    line-height: 1.8;
+    border: solid 2px #fff;
+    border-radius: 30px;
+    display: inline-block;
+  }
+}
+@media only screen and (max-width: 375px) {
+  #top span {
+    border: none;
+    font-size: 1.4rem;
+  }
+  .main-content__target {
+    text-align: center;
+    padding: 1px 26px;
+    line-height: 1.8;
+    border: solid 2px #fff;
+    border-radius: 30px;
+    display: inline-block;
+  }
+}
+@media only screen and (max-width: 320px) {
+  #top span {
+    border: none;
+    padding: 0;
+    font-size: 1.2rem;
+  }
+  .main-content__target {
+    text-align: center;
+    padding: 1px 30px;
+    line-height: 1.8;
+    border: solid 2px #fff;
+    border-radius: 30px;
+    display: inline-block;
+  }
+}
+#top h1 {
+  position: relative;
+  line-height: 1.33;
+  margin-bottom: 2%;
+  margin-top: 1.8%;
+}
+@media only screen and (max-width: 1024px) {
+  #top h1 {
+    margin-top: 3%;
+    margin-bottom: 1.3%;
+    font-size: 2.7rem;
+  }
+}
+@media only screen and (max-width: 992px) {
+  #top h1 {
+    margin-top: 1.9%;
+    margin-bottom: 2.2%;
+    font-size: 3.2rem;
+  }
+}
+@media only screen and (max-width: 896px) {
+  #top h1 {
+    margin-top: 2.5%;
+    margin-bottom: 3%;
+  }
+}
+@media only screen and (max-width: 850px) {
+  #top h1 {
+    margin-bottom: 2.5%;
+  }
+}
+@media only screen and (max-width: 800px) {
+  #top h1 {
+    margin-top: 3%;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #top h1 {
+    margin-top: 3.5%;
+    margin-bottom: 2.5%;
+    font-size: 3.5rem;
+  }
+}
+@media only screen and (max-width: 688px) {
+  #top h1 {
+    font-size: 3.5rem;
+    margin-top: 4%;
+    margin-bottom: 3.5%;
+    margin-left: 0;
+  }
+}
+@media only screen and (max-width: 650px) {
+  #top h1 {
+    font-size: 3.5rem;
+    margin-top: 5%;
+    margin-bottom: 3%;
+    margin-left: 0;
+  }
+}
+@media only screen and (max-width: 580px) {
+  #top h1 {
+    font-size: 3.5rem;
+    margin-bottom: 4%;
+    margin-top: 4.5%;
+    margin-left: 0;
+  }
+}
+@media only screen and (max-width: 540px) {
+  #top h1 {
+    font-size: 3.5rem;
+    margin-bottom: 6%;
+    margin-top: 6%;
+    margin-left: 0;
+  }
+}
+@media only screen and (max-width: 414px) {
+  #top h1 {
+    font-size: 2.8rem;
+    margin-bottom: 3%;
+    margin-top: 6%;
+    margin-left: 0;
+  }
+}
+@media only screen and (max-width: 375px) {
+  #top h1 {
+    font-size: 2.5rem;
+    margin-bottom: 3%;
+    margin-top: 10%;
+  }
+}
+@media only screen and (max-width: 320px) {
+  #top h1 {
+    font-size: 2.3rem;
+    margin-bottom: 3%;
+    margin-top: 10%;
+  }
+}
+
+/*================
+  6. Information
+=================*/
+.inner-letter {
+  line-height: 2;
+}
+.font-green {
+  color: #00a040;
+  font-weight: bold;
+}
+
+/*==============
+  7. Footer
+===============*/
+#footer {
+  margin-top: 3%;
+  padding: 10px 0;
+  background-color: #00a040;
+  color: #fff;
+  text-align: center;
+}
+#footer a {
+  font-size: 1.2rem;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #fff;
+}
+#footer a:hover {
+  color: #555;
+}
+.container {
+  margin-top: 1%;
+}
+.copyright {
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  line-height: 27px;
+  padding-top: 10px;
+}
+@media only screen and (max-width: 540px) {
+  .copyright {
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    line-height: 20px;
+    padding-top: 25px;
+  }
+}
+#footer div {
+  display: inline;
+}
+@media only screen and (max-width: 991px) {
+  .footer-nav {
+    padding-bottom: 3%;
+  }
+  #footer a {
+    font-size: 1.1rem;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 2%;
+  }
+  #footer div {
+    display: block;
+  }
+}

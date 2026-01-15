@@ -1,0 +1,118 @@
+{
+  "version": "1.0",
+  "description": "サービス終了サイト用HTMLテンプレート設定",
+  "placeholders": {
+    "SERVICE_NAME": {
+      "type": "string",
+      "description": "サービス名（例: 東京都新型コロナウイルスワクチン大規模接種予約システム）",
+      "default": "東京都サービス",
+      "required": true,
+      "maxLength": 100
+    },
+    "SERVICE_CATEGORY": {
+      "type": "string",
+      "description": "サービスのカテゴリー（例: 東京都新型コロナウイルスワクチン）",
+      "default": "東京都サービス",
+      "required": false,
+      "maxLength": 50
+    },
+    "SERVICE_TITLE": {
+      "type": "string",
+      "description": "サービスのタイトル（例: 大規模接種予約システム）",
+      "default": "サービス終了のお知らせ",
+      "required": true,
+      "maxLength": 50
+    },
+    "META_KEYWORDS": {
+      "type": "string",
+      "description": "SEO用キーワード（カンマ区切り）",
+      "default": "東京都, サービス終了",
+      "required": false,
+      "maxLength": 200
+    },
+    "META_DESCRIPTION": {
+      "type": "string",
+      "description": "SEO用説明文",
+      "default": "このサービスは終了しました",
+      "required": false,
+      "maxLength": 200
+    },
+    "END_DATE": {
+      "type": "string",
+      "description": "サービス終了日（例: 令和6年3月31日（日曜日））",
+      "default": "令和X年X月X日",
+      "required": true,
+      "maxLength": 50
+    },
+    "LAST_UPDATED_DATE": {
+      "type": "string",
+      "description": "最終更新日（例: 令和6年4月12日）",
+      "default": "令和X年X月X日",
+      "required": false,
+      "maxLength": 30
+    },
+    "REDIRECT_URL": {
+      "type": "url",
+      "description": "リダイレクト先のURL",
+      "default": "https://www.metro.tokyo.lg.jp/",
+      "required": true,
+      "validation": "^https?://.+"
+    },
+    "REDIRECT_LINK_TEXT": {
+      "type": "string",
+      "description": "リダイレクト先のリンクテキスト",
+      "default": "東京都ホームページ",
+      "required": false,
+      "maxLength": 50
+    },
+    "REDIRECT_SECONDS": {
+      "type": "number",
+      "description": "リダイレクトまでの秒数",
+      "default": 5,
+      "required": false,
+      "min": 3,
+      "max": 30
+    },
+    "CURRENT_YEAR": {
+      "type": "number",
+      "description": "著作権表示の年",
+      "default": 2024,
+      "required": false,
+      "auto": true
+    }
+  },
+  "examples": [
+    {
+      "name": "新型コロナワクチン予約サイト",
+      "values": {
+        "SERVICE_NAME": "東京都新型コロナウイルスワクチン大規模接種予約システム",
+        "SERVICE_CATEGORY": "東京都新型コロナウイルスワクチン",
+        "SERVICE_TITLE": "大規模接種予約システム",
+        "META_KEYWORDS": "東京都, 新型コロナウイルス, ワクチン, 大規模接種, 予約システム, コロナワクチン, 団体接種",
+        "META_DESCRIPTION": "東京都は新型コロナウイルスワクチンの大規模接種会場の運営は終了しました",
+        "END_DATE": "令和6年3月31日（日曜日）",
+        "LAST_UPDATED_DATE": "令和6年4月12日",
+        "REDIRECT_URL": "https://www.hokeniryo.metro.tokyo.lg.jp/kansen/coronavaccine/index.html",
+        "REDIRECT_LINK_TEXT": "東京都保健医療局 新型コロナワクチン",
+        "REDIRECT_SECONDS": 5,
+        "CURRENT_YEAR": 2024
+      }
+    },
+    {
+      "name": "汎用サービス終了ページ",
+      "values": {
+        "SERVICE_NAME": "東京都○○サービス",
+        "SERVICE_CATEGORY": "東京都",
+        "SERVICE_TITLE": "○○サービス",
+        "META_KEYWORDS": "東京都, サービス終了",
+        "META_DESCRIPTION": "このサービスは終了しました",
+        "END_DATE": "令和6年12月31日",
+        "LAST_UPDATED_DATE": "令和7年1月1日",
+        "REDIRECT_URL": "https://www.metro.tokyo.lg.jp/",
+        "REDIRECT_LINK_TEXT": "東京都ホームページ",
+        "REDIRECT_SECONDS": 5,
+        "CURRENT_YEAR": 2024
+      }
+    }
+  ]
+}

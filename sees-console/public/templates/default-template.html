@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>{{SERVICE_NAME}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- ICON -->
+    <link rel="icon" href="images/favicon.ico" type="image/png" sizes="16x16" />
+    <!-- STYLES -->
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/link.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="top">
+        <!-- HEADER -->
+        <header class="page-header">
+            <div class="brand-area">
+                <h1 class="tokyo-logo">
+                    <img src="images/tokyo-metropolitan-government.png" alt="TOKYO METROPOLITAN GOVERNMENT" width="100%">
+                </h1>
+            </div>
+            <div class="hero-image__sp">
+                <img src="images/hero-img__sp-add.png" class="hero-img__sp-add" alt="イチョウの葉">
+            </div>
+            <div class="hero-image outer">
+                <img src="images/hero-img-bg-add.png" class="hero-img-bg-add" alt="イチョウの葉">
+                <img src="images/vaccine.png" class="vaccine" alt="サービスイメージ">
+            </div>
+        </header>
+        <!-- //HEADER -->
+        <!-- MAIN CONTENT -->
+        <div class="main-content wrapper">
+            <p>{{SERVICE_CATEGORY}}</p>
+            <h1>{{SERVICE_TITLE}}</h1>
+            <div class="main-content__target">
+                <span>お知らせ</span>
+            </div>
+        </div>
+        <!-- //MAIN CONTENT -->
+    </div>
+    <div class="wrapper">
+        <div class="inner" style="text-align: right;">最終更新日：{{LAST_UPDATED_DATE}}<span id="" style="color: #707070;"></span></div>
+    </div>
+    <!-- INFORMATION -->
+    <section class="section-info">
+        <div class="wrapper">
+            <p class="inner inner-letter">
+                <font size="3">■{{SERVICE_NAME}}は<b style="color:red">{{END_DATE}}をもって終了しました。</b><br>
+                &emsp;5秒後に<a href="{{REDIRECT_URL}}">{{REDIRECT_LINK_TEXT}}</a>に遷移します。</font>
+            </p>
+        </div>
+    </section>
+    <!-- //INFORMATION -->
+    <!-- FOOTER -->
+    <footer id="footer" class="section">
+        <div class="container">
+            <p class="copyright">
+                &copy;Copyright {{CURRENT_YEAR}} Tokyo Metropolitan Government.<br>All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+    <!-- JAVASCRIPT -->
+    <script>
+        setTimeout(function() {
+            window.location.href = '{{REDIRECT_URL}}';
+        }, 5*1000); 
+    </script>
+</body>
+
+</html>
