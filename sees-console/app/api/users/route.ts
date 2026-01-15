@@ -32,8 +32,8 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     // 権限チェック（管理者のみ）
-    const user = await getSession();
-    if (!user || user.role !== 2) {
+    const currentUser = await getSession();
+    if (!currentUser || currentUser.role !== 2) {
       return NextResponse.json(
         { error: 'この操作を行う権限がありません' },
         { status: 403 }

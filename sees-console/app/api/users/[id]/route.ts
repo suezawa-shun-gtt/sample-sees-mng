@@ -8,8 +8,8 @@ export async function PUT(
 ) {
   try {
     // 権限チェック（管理者のみ）
-    const user = await getSession();
-    if (!user || user.role !== 2) {
+    const currentUser = await getSession();
+    if (!currentUser || currentUser.role !== 2) {
       return NextResponse.json(
         { error: 'この操作を行う権限がありません' },
         { status: 403 }
@@ -47,7 +47,7 @@ export async function PUT(
     }
 
     // 権限を更新
-    const user = await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id },
       data: { role },
       select: {
@@ -60,11 +60,65 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(user);
+    return NextResponse.json(updatedUser);
   } catch (error) {
     console.error('ユーザー更新エラー:', error);
     return NextResponse.json(
       { error: 'ユーザー更新に失敗しました' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    // 権限チェック（管理者のみ）
+    const currentUser = await getSession();
+    if (!currentUser || currentUser.role !== 2) {
+      return NextResponse.json(
+        { error: 'この操作を行う権限がありません' },
+        { status: 403 }
+      );
+    }
+
+    const { id } = await params;
+
+    // ユーザーの存在確認
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!existingUser) {
+      return NextResponse.json(
+        { error: 'ユーザーが見つかりません' },
+        { status: 404 }
+      );
+    }
+
+    // 自分自身を削除しようとしていないかチェック
+    if (currentUser.userId === id) {
+      return NextResponse.json(
+        { error: '自分自身を削除することはできません' },
+        { status: 400 }
+      );
+    }
+
+    // ユーザーを削除
+    await prisma.user.delete({
+      where: { id },
+    });
+
+    return NextResponse.json(
+      { success: true, message: 'ユーザーを削除しました' },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('ユーザー削除エラー:', error);
+    return NextResponse.json(
+      { error: 'ユーザー削除に失敗しました' },
       { status: 500 }
     );
   }

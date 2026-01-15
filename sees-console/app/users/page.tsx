@@ -25,6 +25,9 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     checkPermission();
@@ -73,6 +76,36 @@ export default function UsersPage() {
       hour: '2-digit',
       minute: '2-digit',
     });
+  };
+
+  const handleDeleteClick = (user: User) => {
+    setSelectedUser(user);
+    setShowDeleteModal(true);
+  };
+
+  const handleDelete = async () => {
+    if (!selectedUser) return;
+
+    try {
+      setDeleting(true);
+      const response = await fetch(`/api/users/${selectedUser.id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || '削除に失敗しました');
+      }
+
+      // 削除成功後、リストを再取得
+      await fetchUsers();
+      setShowDeleteModal(false);
+      setSelectedUser(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'エラーが発生しました');
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const handleRoleChange = async (userId: string, newRole: number) => {
@@ -166,6 +199,9 @@ export default function UsersPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       作成日時
                     </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      操作
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -202,6 +238,14 @@ export default function UsersPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {formatDate(user.createdAt)}
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <button
+                          onClick={() => handleDeleteClick(user)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          削除
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -210,6 +254,56 @@ export default function UsersPage() {
           )}
         </div>
       </div>
+
+      {/* 削除確認モーダル */}
+      {showDeleteModal && selectedUser && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-light text-gray-900 mb-4">
+              ユーザー削除の確認
+            </h2>
+            
+            <div className="mb-6">
+              <p className="text-gray-700 mb-4">
+                以下のユーザーを削除してもよろしいですか？
+              </p>
+              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-500">ユーザー名:</span>
+                  <span className="text-sm font-medium text-gray-900">{selectedUser.name}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-500">メールアドレス:</span>
+                  <span className="text-sm font-medium text-gray-900">{selectedUser.email}</span>
+                </div>
+              </div>
+              <p className="text-sm text-red-600 mt-4">
+                ⚠️ この操作は取り消せません
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setSelectedUser(null);
+                }}
+                disabled={deleting}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="flex-1 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {deleting ? '削除中...' : '削除'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
