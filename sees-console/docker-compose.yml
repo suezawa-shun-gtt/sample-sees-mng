@@ -64,6 +64,7 @@ services:
       AZURE_CLIENT_SECRET: "${AZURE_CLIENT_SECRET:-your-client-secret}"
       AZURE_RESOURCE_GROUP: "${AZURE_RESOURCE_GROUP:-sees-resources}"
       AZURE_LOCATION: "${AZURE_LOCATION:-japaneast}"
+      AZURE_ENVIRONMENT: "${AZURE_ENVIRONMENT:-dev}" # 'dev' または 'prd'
     ports:
       - "3000:3000"
     volumes:

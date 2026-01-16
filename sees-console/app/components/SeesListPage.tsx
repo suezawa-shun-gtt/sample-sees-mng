@@ -4,16 +4,17 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { Header } from './Header';
+import { formatSeesId } from '@/lib/format-id';
 
 interface NsRecord {
   id: string;
-  seesId: string;
+  seesId: number;
   nameServer: string;
   createdAt: string;
 }
 
 interface Sees {
-  id: string;
+  id: number;
   title: string;
   note: string | null;
   targetDomain: string;
@@ -144,6 +145,9 @@ export function SeesListPage() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     タイトル
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -172,6 +176,11 @@ export function SeesListPage() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {seesList.map((sees) => (
                   <tr key={sees.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-mono text-gray-900">
+                        {formatSeesId(sees.id)}
+                      </div>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
                         {sees.title}

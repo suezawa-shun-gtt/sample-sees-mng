@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../app/generated/prisma"
@@ -13,46 +7,41 @@ datasource db {
   provider = "postgresql"
 }
 
-// ユーザーテーブル
 model User {
-  id         String   @id @default(uuid())
-  name       String   // ユーザー名
-  email      String   @unique // メールアドレス（ユニーク）
-  password   String   // ハッシュ化されたパスワード
-  role       Int      @default(0) // 権限(0: 閲覧者、1: 編集者、2: 管理者)
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
 }
 
-// SEES基本情報テーブル
 model Sees {
-  id                String   @id @default(uuid())
-  title             String   // タイトル
-  note              String?  // 備考
-  targetDomain      String   @unique @map("target_domain")
-  redirectUrl       String   @map("redirect_url")
-  previewUrl        String?  @map("preview_url") // HTML内部確認用URL
-  templateVariables Json     @map("template_variables") // プレースホルダーの値をJSON形式で保存
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
-
-  // リレーション
+  targetDomain      String     @unique @map("target_domain")
+  redirectUrl       String     @map("redirect_url")
+  previewUrl        String?    @map("preview_url")
+  templateVariables Json       @map("template_variables")
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
+  note              String?
+  title             String
+  id                Int        @id @default(autoincrement())
+  azureStaticAppName String?   @map("azure_static_app_name") // Azure Static Web App名
+  azureDnsZoneName  String?    @map("azure_dns_zone_name")    // Azure DNSゾーン名
   nsRecords         NsRecord[]
 
   @@map("sees")
 }
 
-// NSレコード情報テーブル
 model NsRecord {
-  id        String   @id @default(uuid())
-  seesId    String   @map("sees_id")
-  nameServer String  @map("name_server")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  // リレーション
-  sees      Sees     @relation(fields: [seesId], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  nameServer String   @map("name_server")
+  createdAt  DateTime @default(now()) @map("created_at")
+  seesId     Int      @map("sees_id")
+  sees       Sees     @relation(fields: [seesId], references: [id], onDelete: Cascade)
 
   @@map("ns_records")
 }

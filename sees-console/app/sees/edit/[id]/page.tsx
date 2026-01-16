@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { DEFAULT_PLACEHOLDERS, validatePlaceholders } from '@/lib/template-utils';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { formatSeesId } from '@/lib/format-id';
 
 interface Sees {
-  id: string;
+  id: number;
   title: string;
   note: string | null;
   targetDomain: string;
@@ -194,6 +195,19 @@ export default function SeesEditPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
               基本情報
             </h2>
+
+            {/* ID（編集不可） */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                ID
+              </label>
+              <input
+                type="text"
+                value={formatSeesId(sees.id)}
+                disabled
+                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600 cursor-not-allowed font-mono"
+              />
+            </div>
 
             {/* タイトル（編集不可） */}
             <div className="mb-4">

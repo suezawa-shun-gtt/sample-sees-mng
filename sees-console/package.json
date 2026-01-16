@@ -9,6 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@azure/arm-appservice": "^18.0.0",
+    "@azure/arm-dns": "^5.1.0",
+    "@azure/arm-resources": "^7.0.0",
+    "@azure/identity": "^4.13.0",
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
     "@types/bcryptjs": "^2.4.6",

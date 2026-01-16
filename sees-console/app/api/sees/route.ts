@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { redisCache } from '@/lib/redis';
 import { getSession } from '@/lib/auth';
+import { deployAzureResources, registerCustomDomain, isAzureConfigured } from '@/lib/azure';
+import { formatSeesId } from '@/lib/format-id';
 
 export async function GET() {
   try {
@@ -55,8 +57,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // SEESをデータベースに登録
-    const sees = await prisma.sees.create({
+    // Azure設定チェック
+    const azureConfigured = isAzureConfigured();
+
+    // まずSEESをデータベースに登録（IDを確定するため）
+    let sees = await prisma.sees.create({
       data: {
         title,
         targetDomain,
@@ -76,6 +81,59 @@ export async function POST(request: Request) {
         nsRecords: true,
       },
     });
+
+    // Azureリソースをデプロイ（設定されている場合）
+    if (azureConfigured) {
+      try {
+        console.log('Azureリソースのデプロイを開始...');
+        
+        // プロジェクト名はsees-{id}の形式（例: sees-0001）
+        const projectName = `sees-${formatSeesId(sees.id)}`;
+        
+        const azureDeploymentResult = await deployAzureResources(
+          targetDomain,
+          projectName
+        );
+
+        console.log('Azureリソースのデプロイ完了:', azureDeploymentResult);
+
+        // SEESをAzure情報で更新
+        sees = await prisma.sees.update({
+          where: { id: sees.id },
+          data: {
+            previewUrl: `https://${azureDeploymentResult.staticAppUrl}`,
+            azureStaticAppName: azureDeploymentResult.staticAppName,
+            azureDnsZoneName: azureDeploymentResult.dnsZoneName,
+            nsRecords: {
+              deleteMany: {},
+              create: azureDeploymentResult.nameServers.map((ns: string) => ({
+                nameServer: ns,
+              })),
+            },
+          },
+          include: {
+            nsRecords: true,
+          },
+        });
+
+        // カスタムドメインを登録（バックグラウンドで実行）
+        setTimeout(async () => {
+          try {
+            await registerCustomDomain(
+              azureDeploymentResult.staticAppName,
+              targetDomain
+            );
+            console.log('カスタムドメイン登録完了');
+          } catch (error) {
+            console.error('カスタムドメイン登録エラー（バックグラウンド）:', error);
+          }
+        }, 30000); // 30秒待機
+      } catch (error) {
+        console.error('Azureデプロイエラー:', error);
+        // Azureデプロイに失敗してもSEESは作成済みなので、エラーログだけ残す
+        // 必要に応じて、後で手動デプロイできるようにする
+      }
+    }
 
     // ドラフトをRedisから削除
     if (draftId) {

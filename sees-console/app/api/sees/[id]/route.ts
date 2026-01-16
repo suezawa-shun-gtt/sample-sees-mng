@@ -1,17 +1,26 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
+import { deleteAzureResources, isAzureConfigured } from '@/lib/azure';
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const { id: idString } = await params;
 
-    if (!id) {
+    if (!idString) {
       return NextResponse.json(
         { error: '無効なIDです' },
+        { status: 400 }
+      );
+    }
+
+    const id = parseInt(idString, 10);
+    if (isNaN(id)) {
+      return NextResponse.json(
+        { error: '無効なID形式です' },
         { status: 400 }
       );
     }
@@ -54,13 +63,21 @@ export async function PUT(
       );
     }
 
-    const { id } = await params;
+    const { id: idString } = await params;
     const body = await request.json();
     const { redirectUrl, note, templateVariables, previewUrl, nsRecords } = body;
 
-    if (!id) {
+    if (!idString) {
       return NextResponse.json(
         { error: '無効なIDです' },
+        { status: 400 }
+      );
+    }
+
+    const id = parseInt(idString, 10);
+    if (isNaN(id)) {
+      return NextResponse.json(
+        { error: '無効なID形式です' },
         { status: 400 }
       );
     }
@@ -123,11 +140,19 @@ export async function DELETE(
       );
     }
 
-    const { id } = await params;
+    const { id: idString } = await params;
 
-    if (!id) {
+    if (!idString) {
       return NextResponse.json(
         { error: '無効なIDです' },
+        { status: 400 }
+      );
+    }
+
+    const id = parseInt(idString, 10);
+    if (isNaN(id)) {
+      return NextResponse.json(
+        { error: '無効なID形式です' },
         { status: 400 }
       );
     }
@@ -142,6 +167,18 @@ export async function DELETE(
         { error: '指定されたSEESが見つかりません' },
         { status: 404 }
       );
+    }
+
+    // Azureリソースを削除（設定されている場合）
+    if (isAzureConfigured() && sees.azureStaticAppName && sees.azureDnsZoneName) {
+      try {
+        console.log('Azureリソースを削除中...');
+        await deleteAzureResources(sees.azureDnsZoneName, sees.azureStaticAppName);
+        console.log('Azureリソース削除完了');
+      } catch (error) {
+        console.error('Azureリソース削除エラー:', error);
+        // エラーが発生してもデータベースからは削除する
+      }
     }
 
     // SEESを削除（NSレコードはカスケード削除される）
